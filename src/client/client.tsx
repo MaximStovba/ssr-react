@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import reducers from '../store/reducers';
 import App from './components/App';
+import axios from 'axios';
 
 declare global {
   interface Window {
@@ -14,13 +15,17 @@ declare global {
   }
 }
 
+const axiosInstance = axios.create({
+  baseURL: '/proxy',
+});
+
 const state = window.INITIAL_STATE;
 delete window.INITIAL_STATE;
 
 const store = createStore(
   reducers,
   state,
-  applyMiddleware(thunk)
+  applyMiddleware(thunk.withExtraArgument(axiosInstance))
 );
 
 ReactDOM.hydrate(

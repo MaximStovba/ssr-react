@@ -9,12 +9,21 @@ import routes from './client/Routes';
 import createStore from './store/createStore';
 import { matchRoutes } from 'react-router-dom';
 import App from 'client/components/App';
+import proxy from 'express-http-proxy';
 
 const app = express();
-
+app.use(
+  '/proxy',
+  proxy('https://ya-praktikum.tech', {
+    proxyReqOptDecorator(opts) {
+      opts.headers['x-forwarded-host'] = 'http://localhost:3000';
+      return opts;
+    }
+  })
+);
 app.use(express.static('public'));
 app.get('*', (req, res, next) => {
-  const store = createStore();
+  const store = createStore(req);
 
   const promises = matchRoutes(routes, req.path)?.map(({ route }) => {
     // @ts-ignore

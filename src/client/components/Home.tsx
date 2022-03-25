@@ -55,7 +55,7 @@ const Home = () => {
       <div>Home!</div>
       <button onClick={() => authUser()}>SignIn!</button>
       <button onClick={() => LogOut()}>LogOut!</button>
-      <button onClick={() => getUsers()}>GetUsers!</button>
+      <button onClick={() => getUsers()}>GetLieder!</button>
     </div>
   );
 };
