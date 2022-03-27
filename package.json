@@ -31,6 +31,7 @@
     "@types/react-dom": "17.0.13",
     "@types/react-router-dom": "5.3.3",
     "@types/serialize-javascript": "5.0.2",
+    "@types/set-cookie-parser": "2.4.2",
     "@types/webpack-node-externals": "2.5.3",
     "babel-loader": "8.2.3",
     "babel-polyfill": "6.26.0",
@@ -57,6 +58,7 @@
     "react-redux": "7.2.6",
     "react-router-dom": "6.2.2",
     "redux": "4.1.2",
-    "redux-thunk": "2.4.1"
+    "redux-thunk": "2.4.1",
+    "set-cookie-parser": "2.4.8"
   }
 }
