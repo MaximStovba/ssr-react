@@ -5,7 +5,7 @@ export default () => {
   return (
     <div>
       <Link to="/">Home</Link> <br/>
-      <Link to="/lieder">Lieder</Link>
+      <Link to="/leaderboard">Lieder</Link>
     </div>
   );
 };

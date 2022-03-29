@@ -30,13 +30,37 @@ app.use('/signin', (request, response) => {
           decodeValues: true  // default: true
         });
         console.log(cookies);
-        cookies.forEach((cookieObject: any) => response.cookie(cookieObject.name, cookieObject.value))
+        cookies.forEach((cookieObject: any) => response.cookie(cookieObject.name, cookieObject.value)) // { maxAge: 0, httpOnly: true }
         response.send(res.data);
       })
       .catch(err => {
         console.log(err);
         return err;
       });
+})
+
+app.use('/logout', (request, response) => {
+  const data = {};
+  axios
+    .post('https://ya-praktikum.tech/api/v2/auth/logout', data, {
+      withCredentials: true,
+      headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json',
+        // @ts-ignore
+        'Cookie': request.headers.cookie }
+    })
+    .then(res => {
+      // @ts-ignore
+      const cookies = setCookie.parse((res), {
+        decodeValues: true  // default: true
+      });
+      console.log(cookies);
+      cookies.forEach((cookieObject: any) => response.cookie(cookieObject.name, cookieObject.value, { maxAge: 0, httpOnly: true }))
+      response.send(res.data);
+    })
+    .catch(err => {
+      console.log(err);
+      return err;
+    });
 })
 
 app.use('/leaderboard', (request, response) => {
@@ -50,10 +74,11 @@ app.use('/leaderboard', (request, response) => {
       withCredentials: true,
       headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json',
         // @ts-ignore
-        'Cookie': request.headers.cookie }
+        'Cookie': request.headers.cookie ? request.headers.cookie : '' }
     })
     .then(res => {
       response.send(res.data);
+      // TODO: добавить обработку ошибки 401
     })
     .catch(err => {
       console.log(err);

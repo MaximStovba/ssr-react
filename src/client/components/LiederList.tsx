@@ -1,13 +1,16 @@
-import { fetchUsers } from 'store/actions';
+// import { getLeader } from '../../store/actions/mode';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  useSelector,
+  // useDispatch
+} from 'react-redux';
 
 const LiederList = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const users = useSelector(state => state.users);
 
   React.useEffect(() => {
-    dispatch(fetchUsers());
+    // dispatch(fetchUsers());
   }, []);
 
   return (
@@ -16,7 +19,7 @@ const LiederList = () => {
 };
 
 function loadData(store: any) {
-  return store.dispatch(fetchUsers());
+  // return store.dispatch(fetchUsers());
 }
 
 export default {

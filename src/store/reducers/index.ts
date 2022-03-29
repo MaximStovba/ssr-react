@@ -1,6 +1,14 @@
 import { combineReducers } from 'redux';
-import usersReducer from './usersReducer';
+import { authReducer } from './auth';
+import { settingsReducer } from './settings';
+import { gameReducer } from './game';
+import { modeReducer } from './mode';
 
-export default combineReducers({
-  users: usersReducer,
+export const rootReducer = combineReducers({
+  auth: authReducer,
+  settings: settingsReducer,
+  game: gameReducer,
+  mode: modeReducer,
 });
+
+export type RootState = ReturnType<typeof rootReducer>

@@ -5,9 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import reducers from '../store/reducers';
+import { rootReducer } from '../store/reducers';
 import App from './components/App';
-import axios from 'axios';
 
 declare global {
   interface Window {
@@ -15,17 +14,14 @@ declare global {
   }
 }
 
-const axiosInstance = axios.create({
-  baseURL: '/proxy',
-});
-
 const state = window.INITIAL_STATE;
 delete window.INITIAL_STATE;
 
 const store = createStore(
-  reducers,
+  rootReducer,
+  // @ts-ignore
   state,
-  applyMiddleware(thunk.withExtraArgument(axiosInstance))
+  applyMiddleware(thunk)
 );
 
 ReactDOM.hydrate(
