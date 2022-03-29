@@ -24,7 +24,7 @@ export function modeReducer(state: TModeSettings = defaultState, { type, payload
     case ACTIONS.GET_LEADER:
       return {
         ...state,
-        leader: payload.leader,
+        leader: payload,
       };
     default:
       return state;

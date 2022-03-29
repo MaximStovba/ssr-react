@@ -1,25 +1,27 @@
-// import { getLeader } from '../../store/actions/mode';
+import { getLeader } from '../../store/actions/mode';
 import React from 'react';
-import {
-  useSelector,
-  // useDispatch
-} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const LiederList = () => {
-  // const dispatch = useDispatch();
-  const users = useSelector(state => state.users);
+  const dispatch = useDispatch();
+  const {leader} = useSelector(state => state.mode);
 
   React.useEffect(() => {
-    // dispatch(fetchUsers());
+    dispatch(getLeader());
   }, []);
 
   return (
-    <>{users && users.map((user: any) => <li key={user.data.rating}>{user.data.first_name}</li>)}</>
+    <>
+      {leader &&
+        leader.map((user: any) => (
+          <li key={user.data.rating}>{user.data.first_name}</li>
+        ))}
+    </>
   );
 };
 
 function loadData(store: any) {
-  // return store.dispatch(fetchUsers());
+  return store.dispatch(getLeader());
 }
 
 export default {

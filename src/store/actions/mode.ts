@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import axios from 'axios';
 
 export const ACTIONS = {
   TOGGLE_MODE: 'TOGGLE_MODE',
@@ -19,9 +20,14 @@ export function setGeolocation(payload: Record<string, any>) {
   };
 }
 
-export function getLeader(payload: Record<string, any>) {
-  return {
+export const getLeader = () => async (dispatch: any) => {
+  const res = await axios.post('/leader', {}, {
+    withCredentials: true,
+  });
+
+  dispatch({
     type: ACTIONS.GET_LEADER,
-    payload,
-  };
+    payload: res.data
+  });
 }
+

@@ -12,84 +12,95 @@ import App from 'client/components/App';
 import cors from 'cors';
 import axios from 'axios';
 import setCookie from 'set-cookie-parser';
+import bodyParser from 'body-parser';
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 app.use('/signin', (request, response) => {
-    const data = {
-      login: 'Maxim',
-      password: 'Stovba1234',
-    };
-    axios
-      .post('https://ya-praktikum.tech/api/v2/auth/signin', data, {
-        withCredentials: true,
-      })
-      .then(res => {
-        // @ts-ignore
-        const cookies = setCookie.parse(res, {
-          decodeValues: true  // default: true
-        });
-        console.log(cookies);
-        cookies.forEach((cookieObject: any) => response.cookie(cookieObject.name, cookieObject.value)) // { maxAge: 0, httpOnly: true }
-        response.send(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
-})
-
-app.use('/logout', (request, response) => {
-  const data = {};
   axios
-    .post('https://ya-praktikum.tech/api/v2/auth/logout', data, {
+    .post('https://ya-praktikum.tech/api/v2/auth/signin', request.body, {
       withCredentials: true,
-      headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json',
-        // @ts-ignore
-        'Cookie': request.headers.cookie }
     })
     .then(res => {
       // @ts-ignore
-      const cookies = setCookie.parse((res), {
-        decodeValues: true  // default: true
+      const cookies = setCookie.parse(res, {
+        decodeValues: true, // default: true
       });
-      console.log(cookies);
-      cookies.forEach((cookieObject: any) => response.cookie(cookieObject.name, cookieObject.value, { maxAge: 0, httpOnly: true }))
+      cookies.forEach((cookieObject: any) =>
+        response.cookie(cookieObject.name, cookieObject.value)
+      );
       response.send(res.data);
     })
     .catch(err => {
       console.log(err);
       return err;
     });
-})
+});
 
-app.use('/leaderboard', (request, response) => {
-  const data = {
-    ratingFieldName: 'rating',
-    cursor: 0,
-    limit: 5,
-  };
+app.use('/logout', (request, response) => {
   axios
-    .post('https://ya-praktikum.tech/api/v2/leaderboard/starship', data,{
+    .post('https://ya-praktikum.tech/api/v2/auth/logout', {}, {
       withCredentials: true,
-      headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
         // @ts-ignore
-        'Cookie': request.headers.cookie ? request.headers.cookie : '' }
+        Cookie: request.headers.cookie ? request.headers.cookie : '',
+      },
     })
     .then(res => {
+      // @ts-ignore
+      const cookies = setCookie.parse(res, {
+        decodeValues: true, // default: true
+      });
+      cookies.forEach((cookieObject: any) =>
+        response.cookie(cookieObject.name, cookieObject.value, {
+          maxAge: 0,
+          httpOnly: true,
+        })
+      );
       response.send(res.data);
+    })
+    .catch(err => {
+      console.log(err);
+      return err;
+    });
+});
+
+const data = {
+  ratingFieldName: 'rating',
+  cursor: 0,
+  limit: 5,
+};
+
+app.use('/leader', (request, response) => {
+  axios
+    .post('https://ya-praktikum.tech/api/v2/leaderboard/starship', data, {
+      withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        // @ts-ignore
+        Cookie: request.headers.cookie ? request.headers.cookie : '',
+      },
+    })
+    .then(res => {
+      return response.send(res.data);
+      // console.log(res.data)
       // TODO: добавить обработку ошибки 401
     })
     .catch(err => {
       console.log(err);
-      response.send(err);
+      return err;
     });
-})
+});
+
 app.use(express.static('public'));
 app.get('*', (req, res, next) => {
   const store = createStore(req);
 
-  const promises = matchRoutes(routes, req.path)?.map(({ route }) => {
+  const promises = matchRoutes(routes, req.url)?.map(({ route }) => {
     // @ts-ignore
     return route.loadData ? route.loadData(store) : null;
   });
