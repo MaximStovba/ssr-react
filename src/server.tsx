@@ -13,9 +13,12 @@ import cors from 'cors';
 import axios from 'axios';
 import setCookie from 'set-cookie-parser';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import { auth } from 'middlewares/auth';
 
 const app = express();
 app.use(cors());
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use('/signin', (request, response) => {
   axios
@@ -73,6 +76,8 @@ const data = {
   cursor: 0,
   limit: 5,
 };
+
+app.use(auth);
 
 app.use('/leaderboard', (request, response) => {
   axios
