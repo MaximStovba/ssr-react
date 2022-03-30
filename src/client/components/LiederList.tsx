@@ -1,13 +1,12 @@
 import { getLeader } from '../../store/actions/mode';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const LiederList = () => {
-  const dispatch = useDispatch();
-  const {leader} = useSelector(state => state.mode);
+  const { leader } = useSelector(state => state.mode);
 
   React.useEffect(() => {
-    dispatch(getLeader());
+    // ...
   }, []);
 
   return (

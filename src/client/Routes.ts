@@ -10,7 +10,7 @@ const routes: RouteObject[] = [
   },
   {
     ...LiederList,
-    path: '/leaderboard',
+    path: '/leader',
   },
   {
     path: '*',

@@ -22,9 +22,13 @@ const Home = () => {
 
   function LogOut() {
     axios
-      .post('/logout', {}, {
-        withCredentials: true,
-      })
+      .post(
+        '/logout',
+        {},
+        {
+          withCredentials: true,
+        }
+      )
       .then(res => {
         console.log(res.data);
       })
@@ -35,9 +39,13 @@ const Home = () => {
 
   function getUsers() {
     axios
-      .post('/leader', {}, {
-        withCredentials: true,
-      })
+      .post(
+        '/leaderboard',
+        {},
+        {
+          withCredentials: true,
+        }
+      )
       .then(res => {
         console.log(res);
       })
@@ -48,11 +56,11 @@ const Home = () => {
 
   return (
     <div>
-      <br/>
+      <br />
       <div>Home!</div>
       <button onClick={() => authUser()}>SignIn!</button>
       <button onClick={() => LogOut()}>LogOut!</button>
-      <button onClick={() => getUsers()}>getUsers!</button>
+      <button onClick={() => getUsers()}>getLeader!</button>
     </div>
   );
 };

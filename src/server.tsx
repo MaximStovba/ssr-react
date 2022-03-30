@@ -7,7 +7,7 @@ import { renderToString } from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import routes from './client/Routes';
 import createStore from './store/createStore';
-import { matchRoutes } from 'react-router-dom';
+// import { matchRoutes } from 'react-router-dom';
 import App from 'client/components/App';
 import cors from 'cors';
 import axios from 'axios';
@@ -74,7 +74,7 @@ const data = {
   limit: 5,
 };
 
-app.use('/leader', (request, response) => {
+app.use('/leaderboard', (request, response) => {
   axios
     .post('https://ya-praktikum.tech/api/v2/leaderboard/starship', data, {
       withCredentials: true,
@@ -86,9 +86,7 @@ app.use('/leader', (request, response) => {
       },
     })
     .then(res => {
-      return response.send(res.data);
-      // console.log(res.data)
-      // TODO: добавить обработку ошибки 401
+      response.send(res.data);
     })
     .catch(err => {
       console.log(err);
@@ -100,7 +98,10 @@ app.use(express.static('public'));
 app.get('*', (req, res, next) => {
   const store = createStore(req);
 
-  const promises = matchRoutes(routes, req.url)?.map(({ route }) => {
+  console.log(req.get('cookie'));
+
+  // const promises = matchRoutes(routes, req.url)?.map(({ route }) => {
+  const promises = routes.map((route) => {
     // @ts-ignore
     return route.loadData ? route.loadData(store) : null;
   });

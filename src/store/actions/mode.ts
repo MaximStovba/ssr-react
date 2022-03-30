@@ -1,5 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import axios from 'axios';
 
 export const ACTIONS = {
   TOGGLE_MODE: 'TOGGLE_MODE',
@@ -20,8 +19,14 @@ export function setGeolocation(payload: Record<string, any>) {
   };
 }
 
-export const getLeader = () => async (dispatch: any) => {
-  const res = await axios.post('/leader', {}, {
+const data = {
+  ratingFieldName: 'rating',
+  cursor: 0,
+  limit: 5,
+};
+
+export const getLeader = () => async (dispatch: any, getState: any, axiosInstance: any) => {
+  const res = await axiosInstance.post('/leaderboard/starship', data, {
     withCredentials: true,
   });
 
