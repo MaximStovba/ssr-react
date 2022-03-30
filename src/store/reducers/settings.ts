@@ -1,11 +1,6 @@
-import { TUserInfo } from 'types';
-
-const ACTIONS = {
-  SAVE: 'SAVE',
-  RESET: 'RESET',
-};
-
-type TProfileData = TUserInfo;
+// eslint-disable-next-line import/prefer-default-export
+import { ACTIONS } from 'store/actions/settings';
+import { TProfileData } from 'types';
 
 const defaultState: TProfileData = {
   first_name: '',
@@ -18,9 +13,13 @@ const defaultState: TProfileData = {
   id: '',
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export function settingsReducer(state: TProfileData = defaultState, { type, payload }: Record<string, any> = {}) {
   switch (type) {
+    case ACTIONS.GET_USER:
+      return {
+        ...state,
+        ...payload,
+      };
     case ACTIONS.SAVE:
       return {
         ...state,
@@ -33,17 +32,4 @@ export function settingsReducer(state: TProfileData = defaultState, { type, payl
     default:
       return state;
   }
-}
-
-export function setUserSettings(payload: Record<string, any>) {
-  return {
-    type: ACTIONS.SAVE,
-    payload,
-  };
-}
-
-export function deleteUserSettings() {
-  return {
-    type: ACTIONS.RESET,
-  };
 }

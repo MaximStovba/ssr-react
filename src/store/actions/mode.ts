@@ -6,6 +6,12 @@ export const ACTIONS = {
   GET_LEADER: 'GET_LEADER',
 };
 
+const __DATA__ = {
+  ratingFieldName: 'rating',
+  cursor: 0,
+  limit: 5,
+};
+
 export function toggleColorTheme() {
   return {
     type: ACTIONS.TOGGLE_MODE,
@@ -19,14 +25,8 @@ export function setGeolocation(payload: Record<string, any>) {
   };
 }
 
-const data = {
-  ratingFieldName: 'rating',
-  cursor: 0,
-  limit: 5,
-};
-
 export const getLeader = () => async (dispatch: any, getState: any, axiosInstance: any) => {
-  const res = await axiosInstance.post('/leaderboard/starship', data, {
+  const res = await axiosInstance.post('/leaderboard/starship', __DATA__, {
     withCredentials: true,
   });
 

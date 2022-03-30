@@ -1,19 +1,21 @@
 /* eslint-disable import/prefer-default-export */
 
-export const ACTIONS = {
+export const AUTH_ACTIONS = {
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT',
+  REGISTER: 'REGISTER',
 };
 
 export function signInActions(payload: Record<string, any>) {
   return {
-    type: ACTIONS.LOGIN,
+    type: AUTH_ACTIONS.LOGIN,
     payload,
   };
 }
 
 export function logOutActions() {
   return {
-    type: ACTIONS.LOGOUT,
+    type: AUTH_ACTIONS.LOGOUT,
   };
 }
+

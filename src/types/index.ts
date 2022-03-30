@@ -25,6 +25,8 @@ export type TUserInfo = {
   id?: TIdUser,
 }
 
+export type TProfileData = TUserInfo;
+
 export type TPassword = {
   oldPassword: string,
   newPassword: string,
@@ -57,6 +59,13 @@ export type TModeSettings = {
   mode: any,
   city?: string,
   leader?: [],
+}
+
+export type TUserState = {
+  isLogined?: boolean,
+  signInError?: string,
+  isRegistered?: boolean,
+  signUpError?: string,
 }
 
 export type TGameCallback = {

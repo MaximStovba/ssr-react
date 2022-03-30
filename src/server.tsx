@@ -7,7 +7,7 @@ import { renderToString } from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import routes from './client/Routes';
 import createStore from './store/createStore';
-// import { matchRoutes } from 'react-router-dom';
+import { matchRoutes } from 'react-router-dom';
 import App from 'client/components/App';
 import cors from 'cors';
 import axios from 'axios';
@@ -98,10 +98,12 @@ app.use(express.static('public'));
 app.get('*', (req, res, next) => {
   const store = createStore(req);
 
-  console.log(req.get('cookie'));
+  // const state = store.getState();
+  // console.log(state.auth.isLogined);
+  // console.log(req.get('cookie'));
 
-  // const promises = matchRoutes(routes, req.url)?.map(({ route }) => {
-  const promises = routes.map((route) => {
+  const promises = matchRoutes(routes, req.url)?.map(({ route }) => {
+  // const promises = routes.map((route) => {
     // @ts-ignore
     return route.loadData ? route.loadData(store) : null;
   });

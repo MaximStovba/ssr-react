@@ -1,5 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-
 import { ACTIONS } from 'store/actions/mode';
 import { TModeSettings } from 'types';
 

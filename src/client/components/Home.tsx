@@ -1,6 +1,7 @@
 // import axios from 'axios';
 import React from 'react';
 import axios from 'axios';
+import { getUserActions } from 'store/actions/settings';
 
 const Home = () => {
   function authUser() {
@@ -65,6 +66,11 @@ const Home = () => {
   );
 };
 
+function loadData(store: any) {
+  return store.dispatch(getUserActions());
+}
+
 export default {
   element: Home,
+  // loadData,
 };
