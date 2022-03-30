@@ -10,105 +10,32 @@ import createStore from './store/createStore';
 import { matchRoutes } from 'react-router-dom';
 import App from 'client/components/App';
 import cors from 'cors';
-import axios from 'axios';
-import setCookie from 'set-cookie-parser';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { auth } from 'middlewares/auth';
+import {
+  signInControllers,
+  logOutControllers,
+  leaderboardControllers,
+} from 'controllers';
 
 const app = express();
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use('/signin', (request, response) => {
-  axios
-    .post('https://ya-praktikum.tech/api/v2/auth/signin', request.body, {
-      withCredentials: true,
-    })
-    .then(res => {
-      // @ts-ignore
-      const cookies = setCookie.parse(res, {
-        decodeValues: true, // default: true
-      });
-      cookies.forEach((cookieObject: any) =>
-        response.cookie(cookieObject.name, cookieObject.value)
-      );
-      response.send(res.data);
-    })
-    .catch(err => {
-      console.log(err);
-      return err;
-    });
-});
-
-app.use('/logout', (request, response) => {
-  axios
-    .post('https://ya-praktikum.tech/api/v2/auth/logout', {}, {
-      withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-        // @ts-ignore
-        Cookie: request.headers.cookie ? request.headers.cookie : '',
-      },
-    })
-    .then(res => {
-      // @ts-ignore
-      const cookies = setCookie.parse(res, {
-        decodeValues: true, // default: true
-      });
-      cookies.forEach((cookieObject: any) =>
-        response.cookie(cookieObject.name, cookieObject.value, {
-          maxAge: 0,
-          httpOnly: true,
-        })
-      );
-      response.send(res.data);
-    })
-    .catch(err => {
-      console.log(err);
-      return err;
-    });
-});
-
-const data = {
-  ratingFieldName: 'rating',
-  cursor: 0,
-  limit: 5,
-};
+app.use('/signin', signInControllers);
+app.use('/logout', logOutControllers);
 
 app.use(auth);
 
-app.use('/leaderboard', (request, response) => {
-  axios
-    .post('https://ya-praktikum.tech/api/v2/leaderboard/starship', data, {
-      withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-        // @ts-ignore
-        Cookie: request.headers.cookie ? request.headers.cookie : '',
-      },
-    })
-    .then(res => {
-      response.send(res.data);
-    })
-    .catch(err => {
-      console.log(err);
-      return err;
-    });
-});
+app.use('/leaderboard', leaderboardControllers);
 
 app.use(express.static('public'));
 app.get('*', (req, res, next) => {
   const store = createStore(req);
 
-  // const state = store.getState();
-  // console.log(state.auth.isLogined);
-  // console.log(req.get('cookie'));
-
   const promises = matchRoutes(routes, req.url)?.map(({ route }) => {
-  // const promises = routes.map((route) => {
+    // const promises = routes.map((route) => {
     // @ts-ignore
     return route.loadData ? route.loadData(store) : null;
   });
