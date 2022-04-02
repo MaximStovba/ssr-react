@@ -18,40 +18,94 @@ import {
   logOutControllers,
   leaderboardControllers,
 } from 'controllers';
+// pg
+import { dbConnect } from './init';
+import { User } from './init';
+import { IUser } from './models/user';
 
-const app = express();
-app.use(cors());
-app.use(cookieParser());
-app.use(bodyParser.json());
-app.use('/signin', signInControllers);
-app.use('/logout', logOutControllers);
+// Создание пользователя
+export async function createUser(firstName: string, lastName: string) {
+  return User.create({ firstName, lastName });
+}
 
-app.use(auth);
+// Обновление пользователя по ID
+export async function updateUserById(id: number, data: IUser) {
+  return User.update(data, { where: { id } });
+}
 
-app.use('/leaderboard', leaderboardControllers);
+// Удаление пользователя по ID
+export async function deleteUserById(id: number) {
+  return User.destroy({ where: { id } });
+}
 
-app.use(express.static('public'));
-app.get('*', (req, res, next) => {
-  const store = createStore(req);
+// Получение пользователя по ID
+export async function getUserById(id: number) {
+  return User.findOne({ where: { id } });
+}
 
-  const promises = matchRoutes(routes, req.url)?.map(({ route }) => {
-    // const promises = routes.map((route) => {
-    // @ts-ignore
-    return route.loadData ? route.loadData(store) : null;
-  });
+// Получение пользователей по ID
+export async function getUsersByFirstName(firstName: string) {
+  return User.findAll({ where: { firstName } });
+}
 
-  promises &&
-    Promise.all(promises)
-      .then(() => {
-        const content = renderToString(
-          <Provider store={store}>
-            <StaticRouter location={req.url}>
-              <App />
-            </StaticRouter>
-          </Provider>
-        );
+dbConnect().then(async () => {
+  /*
+   *  Запуск приложения только после старта БД
+   */
 
-        res.send(`
+  // Создаем нового пользователя
+  await createUser('Alex', 'Ivanov');
+  // Получаем пользователей с именем Alex
+  const users = await getUsersByFirstName('Alex');
+
+  // Проверяем, найдены ли пользователи
+  if (!users.length) {
+    throw 'Not found';
+  }
+
+  // Получаем id первого пользователя
+  const { id } = users[0];
+  // Обновляем пользователя по ID
+  await updateUserById(id, { firstName: 'Ivan', lastName: 'Ivanov' });
+
+  // Ищем обновленного пользователя по id
+  const findedUser = await getUserById(id);
+  // Выводим в консоль найденного пользователя
+  console.log('Finded user: ', findedUser);
+
+  const app = express();
+  app.use(cors());
+  app.use(cookieParser());
+  app.use(bodyParser.json());
+  app.use('/signin', signInControllers);
+  app.use('/logout', logOutControllers);
+
+  app.use(auth);
+
+  app.use('/leaderboard', leaderboardControllers);
+
+  app.use(express.static('public'));
+  app.get('*', (req, res, next) => {
+    const store = createStore(req);
+
+    const promises = matchRoutes(routes, req.url)?.map(({ route }) => {
+      // const promises = routes.map((route) => {
+      // @ts-ignore
+      return route.loadData ? route.loadData(store) : null;
+    });
+
+    promises &&
+      Promise.all(promises)
+        .then(() => {
+          const content = renderToString(
+            <Provider store={store}>
+              <StaticRouter location={req.url}>
+                <App />
+              </StaticRouter>
+            </Provider>
+          );
+
+          res.send(`
         <html>
           <head></head>
           <body>
@@ -63,10 +117,11 @@ app.get('*', (req, res, next) => {
           </body>
         </html>
       `);
-      })
-      .catch(next);
-});
+        })
+        .catch(next);
+  });
 
-app.listen(3000, () => {
-  console.log('Listening on prot 3000');
+  app.listen(3000, () => {
+    console.log('Listening on prot 3000');
+  });
 });
