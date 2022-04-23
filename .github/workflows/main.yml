@@ -1,6 +1,6 @@
 name: CI
 env:
-  DEPLOY_PACKAGE_NAME: "deploy-ver-${{ gitgub.sha }}"
+  DEPLOY_PACKAGE_NAME: "deploy-ver-${{ github.sha }}"
 
 on:
   push:
