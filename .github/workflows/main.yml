@@ -1,31 +1,35 @@
-name: CI
-env:
-  DEPLOY_PACKAGE_NAME: "deploy-ver-${{ github.sha }}"
-
+name: 'code checks'
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-  workflow_dispatch:
-
+  pull-request:
 jobs:
-  my_testing:
-    runs-on: ubuntu-latest
+  test-job:
+    runs-on: ubuntu-16.04
     steps:
-      - name: Run a testing in Testing
-        run: echo "Hello, world from Testing job"
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      name: 'setup node'
+      with:
+        node-version: '12.x'
 
-  my_deploy:
-    runs-on: ubuntu-latest
-    needs: [my_testing]
+    - name: 'install'
+      run: npm i
+
+    - name: 'test'
+      run: npm run test
+
+  build-job:
+    needs: test-job
+    runs-on: ubuntu-16.04
     steps:
-      - name: Run a deploy in Deploy
-        run: echo "Hello, world from Deploy job"
-        
-      - name: Printing Deploy package
-        run: |
-          echo "Hello, world from Printing Deploy job"
-          echo "Deploy package name is ${{ env.DEPLOY_PACKAGE_NAME }}"
-    
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      name: 'setup node'
+      with:
+        node-version: '12.x'
+
+    - name: 'install'
+      run: npm i
+
+    - name: 'build'
+      run: npm run build

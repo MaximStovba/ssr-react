@@ -11,7 +11,11 @@
     "dev:server": "nodemon --watch build --exec \"node build/bundle.js\"",
     "dev:build-client": "webpack --mode=development --config webpack/client.config.js --watch",
     "dev:build-server": "webpack --mode=development --config webpack/server.config.js --watch",
-    "start": "NODE_ENV=development npm-run-all --print-label --parallel dev:*"
+    "start": "NODE_ENV=development npm-run-all --print-label --parallel dev:*",
+    "prod:build-client": "webpack --mode=production --config webpack/client.config.js",
+    "prod:build-server": "webpack --mode=production --config webpack/server.config.js",
+    "build": "set NODE_ENV=production && npm-run-all --print-label --parallel prod:*",
+    "test": "jest"
   },
   "author": "Maxim",
   "license": "ISC",
@@ -57,6 +61,7 @@
     "express": "4.17.3",
     "express-http-proxy": "1.6.3",
     "isomorphic-fetch": "3.0.0",
+    "jest": "27.5.1",
     "pg": "8.7.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
