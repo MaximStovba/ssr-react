@@ -1,6 +1,7 @@
 # ssr-react
 Simple server-side rendering project
-[![CI](https://github.com/MaximStovba/ssr-react/actions/workflows/main.yml/badge.svg)](https://github.com/MaximStovba/ssr-react/actions/workflows/main.yml)
+
+[![code checks](https://github.com/MaximStovba/ssr-react/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/MaximStovba/ssr-react/actions/workflows/main.yml)
 
 ### Getting started
 
