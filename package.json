@@ -15,7 +15,7 @@
     "prod:build-client": "webpack --mode=production --config webpack/client.config.js",
     "prod:build-server": "webpack --mode=production --config webpack/server.config.js",
     "build": "set NODE_ENV=production && npm-run-all --print-label --parallel prod:*",
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   },
   "author": "Maxim",
   "license": "ISC",
