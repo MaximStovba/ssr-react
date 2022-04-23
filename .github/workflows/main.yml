@@ -1,4 +1,6 @@
 name: CI
+env:
+  DEPLOY_PACKAGE_NAME: "deploy-ver-${{ gitgub.sha }}"
 
 on:
   push:
@@ -21,4 +23,9 @@ jobs:
     steps:
       - name: Run a deploy in Deploy
         run: echo "Hello, world from Deploy job"
+        
+      - name: Printing Deploy package
+        run: |
+          echo "Hello, world from Printing Deploy job"
+          echo "Deploy package name is ${{ env.DEPLOY_PACKAGE_NAME }}"
     
