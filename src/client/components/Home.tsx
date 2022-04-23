@@ -6,8 +6,8 @@ import { getUserActions } from 'store/actions/settings';
 const Home = () => {
   function authUser() {
     const data = {
-      login: 'Maxim',
-      password: 'Stovba1234',
+      login: 'smith',
+      password: '12345678',
     };
     axios
       .post('/signin', data, {
